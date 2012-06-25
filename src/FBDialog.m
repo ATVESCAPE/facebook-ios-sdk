@@ -44,7 +44,7 @@ static BOOL FBIsDeviceIPad() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation FBDialog
+@implementation ShareKitFBDialog
 
 @synthesize delegate = _delegate,
 params   = _params;
@@ -303,7 +303,7 @@ params   = _params;
                                               needle:@"frictionless_recipients="];
     if (recipientJson) {
         // if value parses as an array, treat as set of fbids
-        SBJsonParser *parser = [[[SBJsonParser alloc]
+        ShareKitSBJsonParser *parser = [[[ShareKitSBJsonParser alloc]
                                  init]
                                 autorelease];
         id recipients = [parser objectWithString:recipientJson];
@@ -591,8 +591,8 @@ params   = _params;
 - (id)initWithURL: (NSString *) serverURL
            params: (NSMutableDictionary *) params
   isViewInvisible: (BOOL)isViewInvisible
-     frictionlessSettings: (FBFrictionlessRequestSettings*) frictionlessSettings
-         delegate: (id <FBDialogDelegate>) delegate {
+     frictionlessSettings: (ShareKitFBFrictionlessRequestSettings*) frictionlessSettings
+         delegate: (id <ShareKitFBDialogDelegate>) delegate {
     
     self = [self init];
     _serverURL = [serverURL retain];

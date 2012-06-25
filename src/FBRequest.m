@@ -29,12 +29,12 @@ static const NSTimeInterval kTimeoutInterval = 180.0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface FBRequest ()
-@property (nonatomic,readwrite) FBRequestState state;
+@interface ShareKitFBRequest ()
+@property (nonatomic,readwrite) ShareKitFBRequestState state;
 @property (nonatomic,readwrite) BOOL sessionDidExpire;
 @end
 
-@implementation FBRequest
+@implementation ShareKitFBRequest
 
 @synthesize delegate = _delegate,
             url = _url,
@@ -49,12 +49,12 @@ static const NSTimeInterval kTimeoutInterval = 180.0;
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // class public
 
-+ (FBRequest *)getRequestWithParams:(NSMutableDictionary *) params
++ (ShareKitFBRequest *)getRequestWithParams:(NSMutableDictionary *) params
                          httpMethod:(NSString *) httpMethod
-                           delegate:(id<FBRequestDelegate>) delegate
+                           delegate:(id<ShareKitFBRequestDelegate>) delegate
                          requestURL:(NSString *) url {
     
-    FBRequest* request = [[[FBRequest alloc] init] autorelease];
+    ShareKitFBRequest* request = [[[ShareKitFBRequest alloc] init] autorelease];
     request.delegate = delegate;
     request.url = url;
     request.httpMethod = httpMethod;
@@ -202,7 +202,7 @@ static const NSTimeInterval kTimeoutInterval = 180.0;
     }
     
     
-    SBJSON *jsonParser = [[SBJSON alloc] init];
+    ShareKitSBJSON *jsonParser = [[ShareKitSBJSON alloc] init];
     id result = [jsonParser objectWithString:responseString];
     [jsonParser release];
 

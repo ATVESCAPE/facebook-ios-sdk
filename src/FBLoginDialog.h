@@ -17,7 +17,7 @@
 
 #import "FBDialog.h"
 
-@protocol FBLoginDialogDelegate;
+@protocol ShareKitFBLoginDialogDelegate;
 
 /**
  * Do not use this interface directly, instead, use authorize in Facebook.h
@@ -26,18 +26,18 @@
  * It start pop-ups prompting for credentials and permissions.
  */
 
-@interface FBLoginDialog : FBDialog {
-    id<FBLoginDialogDelegate> _loginDelegate;
+@interface ShareKitFBLoginDialog : ShareKitFBDialog {
+    id<ShareKitFBLoginDialogDelegate> _loginDelegate;
 }
 
 -(id) initWithURL:(NSString *) loginURL
       loginParams:(NSMutableDictionary *) params
-         delegate:(id <FBLoginDialogDelegate>) delegate;
+         delegate:(id <ShareKitFBLoginDialogDelegate>) delegate;
 @end
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@protocol FBLoginDialogDelegate <NSObject>
+@protocol ShareKitFBLoginDialogDelegate <NSObject>
 
 - (void)fbDialogLogin:(NSString*)token expirationDate:(NSDate*)expirationDate;
 

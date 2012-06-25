@@ -36,11 +36,11 @@
 
  Requests are forwarded to instances of SBJsonWriter and SBJsonParser.
  */
-@interface SBJSON : SBJsonBase <SBJsonParser, SBJsonWriter> {
+@interface ShareKitSBJSON : ShareKitSBJsonBase <ShareKitSBJsonParser, ShareKitSBJsonWriter> {
 
 @private    
-    SBJsonParser *jsonParser;
-    SBJsonWriter *jsonWriter;
+    ShareKitSBJsonParser *jsonParser;
+    ShareKitSBJsonWriter *jsonWriter;
 }
 
 

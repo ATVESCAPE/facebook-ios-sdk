@@ -24,10 +24,10 @@
  * Handles frictionless interaction and recipient-caching by the SDK,
  * see https://developers.facebook.com/docs/reference/dialogs/requests/ 
  */
-@interface FBFrictionlessRequestSettings : NSObject<FBRequestDelegate> {
+@interface ShareKitFBFrictionlessRequestSettings : NSObject<ShareKitFBRequestDelegate> {
 @private
     NSArray*            _allowedRecipients;
-    FBRequest*          _activeRequest;
+    ShareKitFBRequest*          _activeRequest;
     BOOL                _enabled;
 }
 
@@ -41,13 +41,13 @@
  *   1. query and cache the current set of frictionless recipients
  *   2. flag other facets of the sdk to behave in a frictionless way
  */
-- (void)enableWithFacebook:(Facebook*)facebook;
+- (void)enableWithFacebook:(ShareKitFacebook*)facebook;
 
 /**
  * Reload recipient cache; called by the sdk to keep the cache fresh;
  * method makes graph request: me/apprequestformerrecipients
  */
-- (void)reloadRecipientCacheWithFacebook:(Facebook*)facebook;
+- (void)reloadRecipientCacheWithFacebook:(ShareKitFacebook*)facebook;
 
 /**
  * Update the recipient cache; called by the sdk to keep the cache fresh;

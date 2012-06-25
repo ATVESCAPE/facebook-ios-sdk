@@ -17,7 +17,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol FBRequestDelegate;
+@protocol ShareKitFBRequestDelegate;
 
 enum {
     kFBRequestStateReady,
@@ -25,25 +25,25 @@ enum {
     kFBRequestStateComplete,
     kFBRequestStateError
 };
-typedef NSUInteger FBRequestState;
+typedef NSUInteger ShareKitFBRequestState;
 
 /**
  * Do not use this interface directly, instead, use method in Facebook.h
  */
-@interface FBRequest : NSObject {
-    id<FBRequestDelegate> _delegate;
+@interface ShareKitFBRequest : NSObject {
+    id<ShareKitFBRequestDelegate> _delegate;
     NSString*             _url;
     NSString*             _httpMethod;
     NSMutableDictionary*  _params;
     NSURLConnection*      _connection;
     NSMutableData*        _responseText;
-    FBRequestState        _state;
+    ShareKitFBRequestState        _state;
     NSError*              _error;
     BOOL                  _sessionDidExpire;
 }
 
 
-@property(nonatomic,assign) id<FBRequestDelegate> delegate;
+@property(nonatomic,assign) id<ShareKitFBRequestDelegate> delegate;
 
 /**
  * The URL which will be contacted to execute the request.
@@ -64,7 +64,7 @@ typedef NSUInteger FBRequestState;
 @property(nonatomic,retain) NSMutableDictionary* params;
 @property(nonatomic,retain) NSURLConnection*  connection;
 @property(nonatomic,retain) NSMutableData* responseText;
-@property(nonatomic,readonly) FBRequestState state;
+@property(nonatomic,readonly) ShareKitFBRequestState state;
 @property(nonatomic,readonly) BOOL sessionDidExpire;
 
 /**
@@ -80,9 +80,9 @@ typedef NSUInteger FBRequestState;
                    params:(NSDictionary *)params
                httpMethod:(NSString *)httpMethod;
 
-+ (FBRequest*)getRequestWithParams:(NSMutableDictionary *) params
++ (ShareKitFBRequest*)getRequestWithParams:(NSMutableDictionary *) params
                         httpMethod:(NSString *) httpMethod
-                          delegate:(id<FBRequestDelegate>)delegate
+                          delegate:(id<ShareKitFBRequestDelegate>)delegate
                         requestURL:(NSString *) url;
 - (BOOL) loading;
 
@@ -95,14 +95,14 @@ typedef NSUInteger FBRequestState;
 /*
  *Your application should implement this delegate
  */
-@protocol FBRequestDelegate <NSObject>
+@protocol ShareKitFBRequestDelegate <NSObject>
 
 @optional
 
 /**
  * Called just before the request is sent to the server.
  */
-- (void)requestLoading:(FBRequest *)request;
+- (void)requestLoading:(ShareKitFBRequest *)request;
 
 /**
  * Called when the Facebook API request has returned a response.
@@ -111,12 +111,12 @@ typedef NSUInteger FBRequestState;
  * (void)request:(FBRequest *)request didLoad:(id)result,
  * which is passed the parsed response object.
  */
-- (void)request:(FBRequest *)request didReceiveResponse:(NSURLResponse *)response;
+- (void)request:(ShareKitFBRequest *)request didReceiveResponse:(NSURLResponse *)response;
 
 /**
  * Called when an error prevents the request from completing successfully.
  */
-- (void)request:(FBRequest *)request didFailWithError:(NSError *)error;
+- (void)request:(ShareKitFBRequest *)request didFailWithError:(NSError *)error;
 
 /**
  * Called when a request returns and its response has been parsed into
@@ -129,14 +129,14 @@ typedef NSUInteger FBRequestState;
  * (void)request:(FBRequest *)request
  *      didReceiveResponse:(NSURLResponse *)response
  */
-- (void)request:(FBRequest *)request didLoad:(id)result;
+- (void)request:(ShareKitFBRequest *)request didLoad:(id)result;
 
 /**
  * Called when a request returns a response.
  *
  * The result object is the raw response from the server of type NSData
  */
-- (void)request:(FBRequest *)request didLoadRawResponse:(NSData *)data;
+- (void)request:(ShareKitFBRequest *)request didLoadRawResponse:(NSData *)data;
 
 @end
 

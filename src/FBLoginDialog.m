@@ -19,7 +19,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation FBLoginDialog
+@implementation ShareKitFBLoginDialog
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // public 
@@ -29,7 +29,7 @@
  */
 - (id)initWithURL:(NSString*) loginURL 
       loginParams:(NSMutableDictionary*) params 
-         delegate:(id <FBLoginDialogDelegate>) delegate{
+         delegate:(id <ShareKitFBLoginDialogDelegate>) delegate{
     
     self = [super init];
     _serverURL = [loginURL retain];

@@ -29,13 +29,13 @@
 
 #import "SBJSON.h"
 
-@implementation SBJSON
+@implementation ShareKitSBJSON
 
 - (id)init {
     self = [super init];
     if (self) {
-        jsonWriter = [SBJsonWriter new];
-        jsonParser = [SBJsonParser new];
+        jsonWriter = [ShareKitSBJsonWriter new];
+        jsonParser = [ShareKitSBJsonParser new];
         [self setMaxDepth:512];
 
     }

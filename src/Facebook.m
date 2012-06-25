@@ -42,7 +42,7 @@ static void *finishedContext = @"finishedContext";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface Facebook ()
+@interface ShareKitFacebook ()
 
 // private properties
 @property(nonatomic, retain) NSArray* permissions;
@@ -52,7 +52,7 @@ static void *finishedContext = @"finishedContext";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation Facebook
+@implementation ShareKitFacebook
 
 @synthesize    accessToken = _accessToken,
             expirationDate = _expirationDate,
@@ -67,7 +67,7 @@ static void *finishedContext = @"finishedContext";
 
 
 - (id)initWithAppId:(NSString *)appId
-        andDelegate:(id<FBSessionDelegate>)delegate {
+        andDelegate:(id<ShareKitFBSessionDelegate>)delegate {
   self = [self initWithAppId:appId urlSchemeSuffix:nil andDelegate:delegate];
   return self;
 }
@@ -99,13 +99,13 @@ static void *finishedContext = @"finishedContext";
  */
 - (id)initWithAppId:(NSString *)appId
     urlSchemeSuffix:(NSString *)urlSchemeSuffix
-        andDelegate:(id<FBSessionDelegate>)delegate {
+        andDelegate:(id<ShareKitFBSessionDelegate>)delegate {
     
     self = [super init];
     if (self) {
         _requests = [[NSMutableSet alloc] init];
         _lastAccessTokenUpdate = [[NSDate distantPast] retain];
-        _frictionlessRequestSettings = [[FBFrictionlessRequestSettings alloc] init];
+        _frictionlessRequestSettings = [[ShareKitFBFrictionlessRequestSettings alloc] init];
         self.appId = appId;
         self.sessionDelegate = delegate;
         self.urlSchemeSuffix = urlSchemeSuffix;
@@ -119,7 +119,7 @@ static void *finishedContext = @"finishedContext";
 - (void)dealloc {
     // this is the one case where the delegate is this object
     _requestExtendingAccessToken.delegate = nil;
-    for (FBRequest* _request in _requests) {
+    for (ShareKitFBRequest* _request in _requests) {
         [_request removeObserver:self forKeyPath:requestFinishedKeyPath];
     }
     [_lastAccessTokenUpdate release];
@@ -164,10 +164,10 @@ static void *finishedContext = @"finishedContext";
  *            Callback interface for notifying the calling application when
  *            the request has received response
  */
-- (FBRequest*)openUrl:(NSString *)url
+- (ShareKitFBRequest*)openUrl:(NSString *)url
                params:(NSMutableDictionary *)params
            httpMethod:(NSString *)httpMethod
-             delegate:(id<FBRequestDelegate>)delegate {
+             delegate:(id<ShareKitFBRequestDelegate>)delegate {
     
     [params setValue:@"json" forKey:@"format"];
     [params setValue:kSDK forKey:@"sdk"];
@@ -178,7 +178,7 @@ static void *finishedContext = @"finishedContext";
     
     [self extendAccessTokenIfNeeded];
     
-    FBRequest* _request = [FBRequest getRequestWithParams:params
+    ShareKitFBRequest* _request = [ShareKitFBRequest getRequestWithParams:params
                                                httpMethod:httpMethod
                                                  delegate:delegate
                                                requestURL:url];
@@ -190,8 +190,8 @@ static void *finishedContext = @"finishedContext";
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (context == finishedContext) {
-        FBRequest* _request = (FBRequest*)object;
-        FBRequestState requestState = [_request state];
+        ShareKitFBRequest* _request = (ShareKitFBRequest*)object;
+        ShareKitFBRequestState requestState = [_request state];
         if (requestState == kFBRequestStateComplete) {
             if ([_request sessionDidExpire]) {
                 [self invalidateSession];
@@ -254,7 +254,7 @@ static void *finishedContext = @"finishedContext";
                 scheme = [scheme stringByAppendingString:@"2"];
             }
             NSString *urlPrefix = [NSString stringWithFormat:@"%@://%@", scheme, kFBAppAuthURLPath];
-            NSString *fbAppUrl = [FBRequest serializeURL:urlPrefix params:params];
+            NSString *fbAppUrl = [ShareKitFBRequest serializeURL:urlPrefix params:params];
             didOpenOtherApp = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:fbAppUrl]];
         }
         
@@ -262,7 +262,7 @@ static void *finishedContext = @"finishedContext";
             NSString *nextUrl = [self getOwnBaseUrl];
             [params setValue:nextUrl forKey:@"redirect_uri"];
             
-            NSString *fbAppUrl = [FBRequest serializeURL:loginDialogURL params:params];
+            NSString *fbAppUrl = [ShareKitFBRequest serializeURL:loginDialogURL params:params];
             didOpenOtherApp = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:fbAppUrl]];
         }
     }
@@ -271,7 +271,7 @@ static void *finishedContext = @"finishedContext";
     // enter his or her credentials.
     if (!didOpenOtherApp) {
         [_loginDialog release];
-        _loginDialog = [[FBLoginDialog alloc] initWithURL:loginDialogURL
+        _loginDialog = [[ShareKitFBLoginDialog alloc] initWithURL:loginDialogURL
                                               loginParams:params
                                                  delegate:self];
         [_loginDialog show];
@@ -486,7 +486,7 @@ static void *finishedContext = @"finishedContext";
  *
  * @deprecated Use of a single session delegate, set at app init, is preferred
  */
-- (void)logout:(id<FBSessionDelegate>)delegate {
+- (void)logout:(id<ShareKitFBSessionDelegate>)delegate {
   [self logout];
   // preserve deprecated callback behavior, but leave cached delegate intact
   // avoid calling twice if the passed and cached delegates are the same
@@ -512,8 +512,8 @@ static void *finishedContext = @"finishedContext";
  * @return FBRequest*
  *            Returns a pointer to the FBRequest object.
  */
-- (FBRequest*)requestWithParams:(NSMutableDictionary *)params
-                    andDelegate:(id <FBRequestDelegate>)delegate {
+- (ShareKitFBRequest*)requestWithParams:(NSMutableDictionary *)params
+                    andDelegate:(id <ShareKitFBRequestDelegate>)delegate {
     if ([params objectForKey:@"method"] == nil) {
         NSLog(@"API Method must be specified");
         return nil;
@@ -550,10 +550,10 @@ static void *finishedContext = @"finishedContext";
  * @return FBRequest*
  *            Returns a pointer to the FBRequest object.
  */
-- (FBRequest*)requestWithMethodName:(NSString *)methodName
+- (ShareKitFBRequest*)requestWithMethodName:(NSString *)methodName
                           andParams:(NSMutableDictionary *)params
                       andHttpMethod:(NSString *)httpMethod
-                        andDelegate:(id <FBRequestDelegate>)delegate {
+                        andDelegate:(id <ShareKitFBRequestDelegate>)delegate {
     NSString * fullURL = [kRestserverBaseURL stringByAppendingString:methodName];
     return [self openUrl:fullURL
                   params:params
@@ -576,8 +576,8 @@ static void *finishedContext = @"finishedContext";
  * @return FBRequest*
  *            Returns a pointer to the FBRequest object.
  */
-- (FBRequest*)requestWithGraphPath:(NSString *)graphPath
-                       andDelegate:(id <FBRequestDelegate>)delegate {
+- (ShareKitFBRequest*)requestWithGraphPath:(NSString *)graphPath
+                       andDelegate:(id <ShareKitFBRequestDelegate>)delegate {
     
     return [self requestWithGraphPath:graphPath
                             andParams:[NSMutableDictionary dictionary]
@@ -607,9 +607,9 @@ static void *finishedContext = @"finishedContext";
  * @return FBRequest*
  *            Returns a pointer to the FBRequest object.
  */
-- (FBRequest*)requestWithGraphPath:(NSString *)graphPath
+- (ShareKitFBRequest*)requestWithGraphPath:(NSString *)graphPath
                          andParams:(NSMutableDictionary *)params
-                       andDelegate:(id <FBRequestDelegate>)delegate {
+                       andDelegate:(id <ShareKitFBRequestDelegate>)delegate {
     
     return [self requestWithGraphPath:graphPath
                             andParams:params
@@ -646,10 +646,10 @@ static void *finishedContext = @"finishedContext";
  * @return FBRequest*
  *            Returns a pointer to the FBRequest object.
  */
-- (FBRequest*)requestWithGraphPath:(NSString *)graphPath
+- (ShareKitFBRequest*)requestWithGraphPath:(NSString *)graphPath
                          andParams:(NSMutableDictionary *)params
                      andHttpMethod:(NSString *)httpMethod
-                       andDelegate:(id <FBRequestDelegate>)delegate {
+                       andDelegate:(id <ShareKitFBRequestDelegate>)delegate {
     
     NSString * fullURL = [kGraphBaseURL stringByAppendingString:graphPath];
     return [self openUrl:fullURL
@@ -669,7 +669,7 @@ static void *finishedContext = @"finishedContext";
  *            dialog has completed.
  */
 - (void)dialog:(NSString *)action
-   andDelegate:(id<FBDialogDelegate>)delegate {
+   andDelegate:(id<ShareKitFBDialogDelegate>)delegate {
     NSMutableDictionary * params = [NSMutableDictionary dictionary];
     [self dialog:action andParams:params andDelegate:delegate];
 }
@@ -688,7 +688,7 @@ static void *finishedContext = @"finishedContext";
  */
 - (void)dialog:(NSString *)action
      andParams:(NSMutableDictionary *)params
-   andDelegate:(id <FBDialogDelegate>)delegate {
+   andDelegate:(id <ShareKitFBDialogDelegate>)delegate {
     
     [_fbDialog release];
     
@@ -699,7 +699,7 @@ static void *finishedContext = @"finishedContext";
     
     if ([action isEqualToString:kLogin]) {
         [params setObject:@"user_agent" forKey:@"type"];
-        _fbDialog = [[FBLoginDialog alloc] initWithURL:dialogURL loginParams:params delegate:self];
+        _fbDialog = [[ShareKitFBLoginDialog alloc] initWithURL:dialogURL loginParams:params delegate:self];
     } else {
         [params setObject:_appId forKey:@"app_id"];
         if ([self isSessionValid]) {
@@ -726,7 +726,7 @@ static void *finishedContext = @"finishedContext";
             id fbid = [params objectForKey:@"to"];
             if (fbid != nil) {
                 // if value parses as a json array expression get the list that way
-                SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];
+                ShareKitSBJsonParser *parser = [[[ShareKitSBJsonParser alloc] init] autorelease];
                 id fbids = [parser objectWithString:fbid];
                 if (![fbids isKindOfClass:[NSArray class]]) {
                     // otherwise seperate by commas (handles the singleton case too)
@@ -736,7 +736,7 @@ static void *finishedContext = @"finishedContext";
             }
         }
         
-        _fbDialog = [[FBDialog alloc] initWithURL:dialogURL
+        _fbDialog = [[ShareKitFBDialog alloc] initWithURL:dialogURL
                                            params:params
                                   isViewInvisible:invisible
                              frictionlessSettings:_frictionlessRequestSettings 
@@ -805,12 +805,12 @@ static void *finishedContext = @"finishedContext";
 #pragma mark - FBRequestDelegate Methods
 // These delegate methods are only called for requests that extendAccessToken initiated
 
-- (void)request:(FBRequest *)request didFailWithError:(NSError *)error {
+- (void)request:(ShareKitFBRequest *)request didFailWithError:(NSError *)error {
     _isExtendingAccessToken = NO;
     _requestExtendingAccessToken = nil;
 }
 
-- (void)request:(FBRequest *)request didLoad:(id)result {
+- (void)request:(ShareKitFBRequest *)request didLoad:(id)result {
     _isExtendingAccessToken = NO;
     _requestExtendingAccessToken = nil;
     NSString* accessToken = [result objectForKey:@"access_token"];
@@ -836,13 +836,13 @@ static void *finishedContext = @"finishedContext";
     }
 }
 
-- (void)request:(FBRequest *)request didLoadRawResponse:(NSData *)data {
+- (void)request:(ShareKitFBRequest *)request didLoadRawResponse:(NSData *)data {
 }
 
-- (void)request:(FBRequest *)request didReceiveResponse:(NSURLResponse *)response{
+- (void)request:(ShareKitFBRequest *)request didReceiveResponse:(NSURLResponse *)response{
 }
 
-- (void)requestLoading:(FBRequest *)request{
+- (void)requestLoading:(ShareKitFBRequest *)request{
 }
 
 @end

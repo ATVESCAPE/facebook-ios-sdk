@@ -20,16 +20,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // private interface
 //
-@interface FBFrictionlessRequestSettings ()
+@interface ShareKitFBFrictionlessRequestSettings ()
 
 @property (readwrite, retain) NSArray *     allowedRecipients;
-@property (readwrite, retain) FBRequest*    activeRequest;
+@property (readwrite, retain) ShareKitFBRequest*    activeRequest;
 
 @end
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation FBFrictionlessRequestSettings 
+@implementation ShareKitFBFrictionlessRequestSettings 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // public
@@ -44,14 +44,14 @@
     return self;
 }
 
-- (void)enableWithFacebook:(Facebook*)facebook {
+- (void)enableWithFacebook:(ShareKitFacebook*)facebook {
     if (!_enabled) {
         _enabled = true;
         [self reloadRecipientCacheWithFacebook:facebook];
     }
 }
 
-- (void)reloadRecipientCacheWithFacebook:(Facebook *)facebook {
+- (void)reloadRecipientCacheWithFacebook:(ShareKitFacebook *)facebook {
     // request the list of frictionless recipients from the server
     id request = [facebook requestWithGraphPath:@"me/apprequestformerrecipients"
                                     andDelegate:self];
@@ -115,7 +115,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // FBRequestDelegate
 
-- (void)request:(FBRequest *)request
+- (void)request:(ShareKitFBRequest *)request
         didLoad:(id)result {
 
     // a little request bookkeeping
@@ -133,7 +133,7 @@
     self.allowedRecipients = recipients;        
 }
 
-- (void)request:(FBRequest *)request didFailWithError:(NSError *)error {
+- (void)request:(ShareKitFBRequest *)request didFailWithError:(NSError *)error {
     // if the request to load the frictionless recipients fails, proceed without updating 
     // the recipients cache; the cache may become invalid due to a failed update or other reasons
     // (e.g. simultaneous use of the same app from multiple devices), in the case of an invalid

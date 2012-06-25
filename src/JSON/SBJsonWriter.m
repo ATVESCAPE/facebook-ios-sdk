@@ -29,7 +29,7 @@
 
 #import "SBJsonWriter.h"
 
-@interface SBJsonWriter ()
+@interface ShareKitSBJsonWriter ()
 
 - (BOOL)appendValue:(id)fragment into:(NSMutableString*)json;
 - (BOOL)appendArray:(NSArray*)fragment into:(NSMutableString*)json;
@@ -40,7 +40,7 @@
 
 @end
 
-@implementation SBJsonWriter
+@implementation ShareKitSBJsonWriter
 
 static NSMutableCharacterSet *kEscapeChars;
 

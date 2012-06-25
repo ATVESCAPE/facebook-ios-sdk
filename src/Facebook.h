@@ -17,8 +17,8 @@
 #import "FBLoginDialog.h"
 #import "FBRequest.h"
 
-@class FBFrictionlessRequestSettings;
-@protocol FBSessionDelegate;
+@class ShareKitFBFrictionlessRequestSettings;
+@protocol ShareKitFBSessionDelegate;
 
 /**
  * Main Facebook interface for interacting with the Facebook developer API.
@@ -26,35 +26,35 @@
  * and Graph APIs, and start user interface interactions (such as
  * pop-ups promoting for credentials, permissions, stream posts, etc.)
  */
-@interface Facebook : NSObject<FBLoginDialogDelegate,FBRequestDelegate>{
+@interface ShareKitFacebook : NSObject<ShareKitFBLoginDialogDelegate,ShareKitFBRequestDelegate>{
     NSString* _accessToken;
     NSDate* _expirationDate;
-    id<FBSessionDelegate> _sessionDelegate;
+    id<ShareKitFBSessionDelegate> _sessionDelegate;
     NSMutableSet* _requests;
-    FBDialog* _loginDialog;
-    FBDialog* _fbDialog;
+    ShareKitFBDialog* _loginDialog;
+    ShareKitFBDialog* _fbDialog;
     NSString* _appId;
     NSString* _urlSchemeSuffix;
     NSArray* _permissions;
     BOOL _isExtendingAccessToken;
-    FBRequest *_requestExtendingAccessToken;
+    ShareKitFBRequest *_requestExtendingAccessToken;
     NSDate* _lastAccessTokenUpdate;
-    FBFrictionlessRequestSettings* _frictionlessRequestSettings;
+    ShareKitFBFrictionlessRequestSettings* _frictionlessRequestSettings;
 }
 
 @property(nonatomic, copy) NSString* accessToken;
 @property(nonatomic, copy) NSDate* expirationDate;
-@property(nonatomic, assign) id<FBSessionDelegate> sessionDelegate;
+@property(nonatomic, assign) id<ShareKitFBSessionDelegate> sessionDelegate;
 @property(nonatomic, copy) NSString* urlSchemeSuffix;
 @property(nonatomic, readonly, getter=isFrictionlessRequestsEnabled) 
     BOOL isFrictionlessRequestsEnabled;
 
 - (id)initWithAppId:(NSString *)appId
-        andDelegate:(id<FBSessionDelegate>)delegate;
+        andDelegate:(id<ShareKitFBSessionDelegate>)delegate;
 
 - (id)initWithAppId:(NSString *)appId
     urlSchemeSuffix:(NSString *)urlSchemeSuffix
-        andDelegate:(id<FBSessionDelegate>)delegate;
+        andDelegate:(id<ShareKitFBSessionDelegate>)delegate;
 
 - (void)authorize:(NSArray *)permissions;
 
@@ -68,34 +68,34 @@
 
 - (void)logout;
 
-- (void)logout:(id<FBSessionDelegate>)delegate;
+- (void)logout:(id<ShareKitFBSessionDelegate>)delegate;
 
-- (FBRequest*)requestWithParams:(NSMutableDictionary *)params
-                    andDelegate:(id <FBRequestDelegate>)delegate;
+- (ShareKitFBRequest*)requestWithParams:(NSMutableDictionary *)params
+                    andDelegate:(id <ShareKitFBRequestDelegate>)delegate;
 
-- (FBRequest*)requestWithMethodName:(NSString *)methodName
+- (ShareKitFBRequest*)requestWithMethodName:(NSString *)methodName
                           andParams:(NSMutableDictionary *)params
                       andHttpMethod:(NSString *)httpMethod
-                        andDelegate:(id <FBRequestDelegate>)delegate;
+                        andDelegate:(id <ShareKitFBRequestDelegate>)delegate;
 
-- (FBRequest*)requestWithGraphPath:(NSString *)graphPath
-                       andDelegate:(id <FBRequestDelegate>)delegate;
+- (ShareKitFBRequest*)requestWithGraphPath:(NSString *)graphPath
+                       andDelegate:(id <ShareKitFBRequestDelegate>)delegate;
 
-- (FBRequest*)requestWithGraphPath:(NSString *)graphPath
+- (ShareKitFBRequest*)requestWithGraphPath:(NSString *)graphPath
                          andParams:(NSMutableDictionary *)params
-                       andDelegate:(id <FBRequestDelegate>)delegate;
+                       andDelegate:(id <ShareKitFBRequestDelegate>)delegate;
 
-- (FBRequest*)requestWithGraphPath:(NSString *)graphPath
+- (ShareKitFBRequest*)requestWithGraphPath:(NSString *)graphPath
                          andParams:(NSMutableDictionary *)params
                      andHttpMethod:(NSString *)httpMethod
-                       andDelegate:(id <FBRequestDelegate>)delegate;
+                       andDelegate:(id <ShareKitFBRequestDelegate>)delegate;
 
 - (void)dialog:(NSString *)action
-   andDelegate:(id<FBDialogDelegate>)delegate;
+   andDelegate:(id<ShareKitFBDialogDelegate>)delegate;
 
 - (void)dialog:(NSString *)action
      andParams:(NSMutableDictionary *)params
-   andDelegate:(id <FBDialogDelegate>)delegate;
+   andDelegate:(id <ShareKitFBDialogDelegate>)delegate;
 
 - (BOOL)isSessionValid;
 
@@ -114,7 +114,7 @@
 /**
  * Your application should implement this delegate to receive session callbacks.
  */
-@protocol FBSessionDelegate <NSObject>
+@protocol ShareKitFBSessionDelegate <NSObject>
 
 /**
  * Called when the user successfully logged in.
